@@ -1,0 +1,19 @@
+/* src/styles/DistributorForm.css */
+.distributor-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.distributor-form label {
+  margin: 0.5rem 0;
+}
+
+.distributor-form input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+}
+
+.distributor-form button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+}

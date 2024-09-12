@@ -1,0 +1,32 @@
+.home-page {
+  display: flex;
+  justify-content: space-around; /* Distributes cards evenly */
+  align-items: center; /* Aligns items vertically center */
+  flex-wrap: wrap; /* Allows cards to wrap if the screen size is too small */
+  padding: 20px;
+  gap: 20px; /* Space between cards */
+}
+
+.card {
+  width: 200px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  margin: 0;
+}

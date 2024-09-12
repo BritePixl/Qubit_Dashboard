@@ -1,0 +1,41 @@
+/* src/styles/DistributorsPage.css */
+.distributors-page {
+  padding: 20px;
+}
+
+.distributor-card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.distributor-card {
+  flex: 1 1 calc(50% - 20px);
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.distributor-card h2 {
+  margin-bottom: 15px;
+}
+
+.distributor-card button {
+  margin-bottom: 10px;
+}
+
+.distributor-sub-category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.distributor-sub-category-item {
+  flex: 1 1 calc(33% - 10px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
