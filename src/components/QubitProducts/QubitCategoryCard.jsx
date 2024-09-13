@@ -2,25 +2,14 @@ import React, { useState } from "react";
 import ProductForm from "../ProductForm";
 import ProductList from "../ProductList";
 import Modal from "../Modal/Modal";
+import { Link } from "react-router-dom";
+import API from "../../utils/API";
 
-const QubitCategoryCard = ({ category }) => {
-  const [products, setProducts] = useState(category.products || []);
+const QubitCategoryCard = ({ category, refreshCategory, setRefreshCategory, products }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const addProduct = (product) => {
-    if (selectedProduct) {
-      setProducts(products.map((p) => (p.id === product.id ? product : p)));
-    } else {
-      setProducts([...products, product]);
-    }
-    setIsModalOpen(false);
-    setSelectedProduct(null);
-  };
 
-  const deleteProduct = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
-  };
 
   const editProduct = (product) => {
     setSelectedProduct(product);
@@ -37,25 +26,60 @@ const QubitCategoryCard = ({ category }) => {
     setSelectedProduct(null);
   };
 
+  
+  // Delete category logic
+  const deleteCategory = (categoryId) => {
+    // Implement delete category logic here
+    // For example, you can use the categoryId to filter out the category from the parent component's state
+    API.delete('/categories/' + categoryId).then(() => {
+      console.log('Category deleted successfully');
+      // Update the parent component's state to reflect the deletion
+      setRefreshCategory(!refreshCategory);
+    }).catch(err => {
+      console.error('Error deleting category:', err);
+      // Handle error appropriately (e.g., display an error message)
+    })
+  };
   return (
     <div className="category-card">
-      <h2>{category.name}</h2>
-      <button onClick={openAddProductModal}>Add Product</button>
-      <div className="product-actions">
-        {products.length > 0 ? (
-          <ProductList
-            products={products}
-            onEditProduct={editProduct}
-            onDeleteProduct={deleteProduct}
-          />
+      <h2>
+        {category.name} 
+        <button onClick={() => deleteCategory(category.id)} className="danger_button">Delete</button>
+      </h2>
+
+
+      {
+        category.hasProducts? (
+          <>
+            <button className="category_card_button" onClick={openAddProductModal}>Add Product</button>
+            <div className="product-actions">
+              {products.length > 0 ? (
+                <ProductList
+                  products={products}
+                  category={category}
+                  refreshCategory={refreshCategory}
+                  setRefreshCategory={setRefreshCategory}
+                />
+              ) : (
+                <p>No products available in this category.</p>
+              )}
+            </div>
+          </>
         ) : (
-          <p>No products available in this category.</p>
-        )}
-      </div>
+          <Link to={`/category/${category.id}`}>
+            <button className="category_card_button_sec">Show Category</button>
+          </Link>
+        )
+      }
+
+
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ProductForm
-          onAddProduct={addProduct}
+          category={category.name}
+          onAddProduct={isModalOpen}
           existingProduct={selectedProduct}
+          refreshCategory={refreshCategory}
+          setRefreshCategory={setRefreshCategory}
         />
       </Modal>
     </div>

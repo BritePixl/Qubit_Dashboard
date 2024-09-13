@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Modal from "./Modal/Modal";
+import API from "../utils/API";
 
-const ProductList = ({ products, onEditProduct, onDeleteProduct }) => {
+const ProductList = ({ products, onEditProduct, onDeleteProduct, category, refreshCategory, setRefreshCategory }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
@@ -15,21 +16,45 @@ const ProductList = ({ products, onEditProduct, onDeleteProduct }) => {
     setSelectedProduct(null);
   };
 
+  const deleteProduct = (productId) => {
+    API.delete(`/products/${productId}`)
+    .then((res) => {
+      console.log('Product deleted successfully', res.data);
+      setRefreshCategory(!refreshCategory);
+    })
+  }
+
+  const availableToggler = (proId, status) => {
+    API.put(`/products/status/${proId}`, { status:  status })
+    .then((res) => {
+      setRefreshCategory(!refreshCategory);
+    })
+
+  }
+
   return (
     <div>
       {products.length > 0 ? (
-        <ul>
+        <ol>
           {products.map((product) => (
-            <li key={product.id}>
-              {product.name} - {product.status}
-              <button onClick={() => onEditProduct(product)}>Edit</button>
-              <button onClick={() => onDeleteProduct(product.id)}>
-                Delete
-              </button>
-              <button onClick={() => viewProduct(product)}>View</button>
-            </li>
+            <>
+            {JSON.parse(product.categories)[0] === category.name? (
+                <li key={product.id}>
+                  {product.name} <button onClick={() => deleteProduct(product.id)}> Delete </button>
+                  {
+                    product.status == "in stock"? (
+                      <button onClick={() => availableToggler(product.id, "not in stock")}> Available </button>
+                    ) : (
+                      <button onClick={() => availableToggler(product.id, "in stock")}> Not Available </button>
+                    )
+                  }
+                  {/* <button onClick={() => onEditProduct(product)}>Edit</button> */}
+                  {/* <button onClick={() => viewProduct(product)}>View</button> */}
+                </li>
+              ):null} 
+            </>
           ))}
-        </ul>
+        </ol>
       ) : (
         <p>No products available.</p>
       )}

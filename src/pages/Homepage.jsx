@@ -2,21 +2,20 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/HomePage.css"; // Add CSS for styling
 
-const HomePage = () => {
+const HomePage = ({categories}) => {
   return (
-    <div className="home-page">
-      <Link to="/qubit-products" className="card">
-        <h2>Qubit Products</h2>
-      </Link>
-      <Link to="/distributors" className="card">
-        <h2>Distributors</h2>
-      </Link>
-      <Link to="/customized-products" className="card">
-        <h2>Customized Products</h2>
-      </Link>
-      <Link to="/fixed-products" className="card">
-        <h2>Fixed Products</h2>
-      </Link>
+    <div >
+      {categories.map((category) => (
+        <div key={category.id} className="home-page">
+          {
+            category.parent === 0 && (
+              <Link to={`/category/${category.id}`} className="card">
+                <h2>{category.name}</h2>
+              </Link>
+            )
+          }
+        </div>
+      ))}
     </div>
   );
 };
